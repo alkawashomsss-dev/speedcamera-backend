@@ -2,16 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Cache buster - change this to force rebuild
-ARG CACHEBUST=8
+# Force no cache - timestamp: 2026-01-08-21-05
+RUN pip install --no-cache-dir tenacity==8.2.3 aiohttp==3.9.1 requests==2.31.0 httpx==0.25.2 fastapi==0.104.1 "uvicorn[standard]==0.24.0" pymongo==4.6.1 python-dotenv==1.0.0 motor==3.3.2 pydantic==2.5.2
 
-# Copy and install requirements (no cache)
-COPY requirements.txt .
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir tenacity aiohttp requests && \
-    pip install --no-cache-dir -r requirements.txt
-
-# Copy application
 COPY server.py .
 
 EXPOSE 8001
