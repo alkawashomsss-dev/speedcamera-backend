@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["python311"]
-
-[phases.install]
-cmds = ["pip install tenacity aiohttp requests httpx fastapi uvicorn pymongo python-dotenv motor pydantic"]
-
-[start]
-cmd = "uvicorn server:app --host 0.0.0.0 --port ${PORT:-8001}"
