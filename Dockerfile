@@ -1,25 +1,14 @@
 FROM python:3.11-slim
 
-# CACHE BUSTER - Railway must rebuild after this
-ARG CACHEBUST=20260108_2135_v1
-
 WORKDIR /app
 
-# Force fresh install with unique timestamp
-RUN echo "Cache bust: 20260108_2135_v1" && \
-    pip install --no-cache-dir --force-reinstall \
-    tenacity \
-    aiohttp \
-    requests \
-    httpx \
-    fastapi \
-    "uvicorn[standard]" \
-    pymongo \
-    python-dotenv \
-    motor \
-    pydantic
+# CACHEBUST v2
+ARG CACHEBUST=v2_20260108_2255
 
-COPY server.py /app/server.py
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY server.py .
 
 RUN python -c "import tenacity; print('SUCCESS: tenacity installed')"
 
