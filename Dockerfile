@@ -2,16 +2,19 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# CACHEBUST v2
-ARG CACHEBUST=v2_20260108_2255
+# CACHEBUST v3
+ARG CACHEBUST=v3_20260108_2305
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server.py .
 
-RUN python -c "import tenacity; print('SUCCESS: tenacity installed')"
+# Set default env vars
+ENV MONGO_URL=mongodb://localhost:27017
+ENV DB_NAME=speedcamera
+ENV PORT=8001
 
 EXPOSE 8001
 
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001"]
+CMD ["sh", "-c", "uvicorn server:app --host 0.0.0.0 --port ${PORT:-8001}"]
